@@ -18,6 +18,9 @@ body {
 }
 
 .display {
+    display: flex;
+    align-items: center;
+    justify-content: end;
     width: 400px;
     height: 100px;
     text-align: right;

@@ -21,3 +21,14 @@ function divide(a, b) {
 function calculate(operator, numA, numB) {
     return operator(numA, numB);
 }
+
+let numbers = document.querySelectorAll(".number");
+let display = document.querySelector(".display");
+
+numbers.forEach(
+    function(numberBtn) {
+        numberBtn.addEventListener("click", () => {
+            display.textContent = numberBtn.textContent;
+        });
+    }
+);
