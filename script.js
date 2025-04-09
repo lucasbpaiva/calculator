@@ -4,28 +4,40 @@ let operator = "";
 let firstOperand = true;
 
 function add(a, b) {
-    return a + b;
+    return Number(a) + Number(b);
 }
 
 function subtract(a, b) {
-    return a - b;
+    return Number(a) - Number(b);
 }
 
 function multiply(a, b) {
-    return a * b;
+    return Number(a) * Number(b);
 }
 
 function divide(a, b) {
-    return a / b;
+    return Number(a) / Number(b);
 }
 
 function calculate(operator, numA, numB) {
-    return operator(numA, numB);
+    switch (operator) {
+        case "add":
+            return add(numA, numB);
+        case "subtract":
+            return subtract(numA, numB);
+        case "multiply":
+            return multiply(numA, numB);
+        case "divide":
+            return divide(numA, numB);
+        default:
+            break;
+    }
 }
 
 let display = document.querySelector(".display");
 let numbers = document.querySelectorAll(".number");
 let operators = document.querySelectorAll(".operator");
+let equalsBtn = document.querySelector("#equalsBtn");
 let clearBtn = document.querySelector("#clearBtn");
 
 numbers.forEach(
@@ -54,6 +66,11 @@ operators.forEach(
         });
     }
 );
+
+equalsBtn.addEventListener("click", () => {
+    let result = calculate(operator, numA, numB);
+    display.textContent = result;
+});
 
 clearBtn.addEventListener("click", () => {
     display.textContent = "0";
