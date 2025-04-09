@@ -4,19 +4,26 @@ let operator = "";
 let firstOperand = true;
 
 function add(a, b) {
-    return Number(a) + Number(b);
+    let result = Number(a) + Number(b);
+    return Number(result.toFixed(8));
 }
 
 function subtract(a, b) {
-    return Number(a) - Number(b);
+    let result = Number(a) - Number(b);
+    return Number(result.toFixed(8));
 }
 
 function multiply(a, b) {
-    return Number(a) * Number(b);
+    let result = Number(a) * Number(b);
+    return Number(result.toFixed(8));
 }
 
 function divide(a, b) {
-    return Number(a) / Number(b);
+    if (b == 0) {
+        return "We don't do that here"
+    }
+    let result = Number(a) / Number(b);
+    return Number(result.toFixed(8));
 }
 
 function calculate(operator, numA, numB) {
@@ -43,15 +50,21 @@ let clearBtn = document.querySelector("#clearBtn");
 numbers.forEach(
     function(numberBtn) {
         numberBtn.addEventListener("click", () => {
+            //replace "," with "." for calculations with decimals
+            let digit = numberBtn.textContent == "," ? "." : numberBtn.textContent;
             if (firstOperand && numA.length < 9) {
-                display.textContent = numA + numberBtn.textContent;
-                numA += numberBtn.textContent;
+                if (numB != "") { //already made an operation
+                    numA = "";
+                    numB = "";
+                }
+                display.textContent = numA.replace(".",",") + numberBtn.textContent;
+                numA += digit;
             } else if (!firstOperand && numB.length < 9) {
                 if (numB == "") {
                     display.textContent = "";
                 }
-                display.textContent = numB + numberBtn.textContent;
-                numB += numberBtn.textContent;
+                display.textContent = numB.replace(".",",") + numberBtn.textContent;
+                numB += digit;
                 console.log(`internally: A = ${numA}, B = ${numB}, operator = ${operator}`)
             } 
         });
@@ -61,6 +74,12 @@ numbers.forEach(
 operators.forEach(
     function(operatorBtn) {
         operatorBtn.addEventListener("click", () => {
+            if (numB != "") {
+                let result = calculate(operator, numA, numB);
+                display.textContent = result;
+                numA = result;
+                numB = "";
+            }
             firstOperand = false;
             operator = operatorBtn.name;
         });
@@ -68,8 +87,11 @@ operators.forEach(
 );
 
 equalsBtn.addEventListener("click", () => {
-    let result = calculate(operator, numA, numB);
-    display.textContent = result;
+    if (numB != "" && operator != "") {
+        let result = calculate(operator, numA, numB);
+        display.textContent = result.toString().replace(".",",");
+        firstOperand = true;  
+    }
 });
 
 clearBtn.addEventListener("click", () => {
