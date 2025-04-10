@@ -68,12 +68,17 @@ function allowedPrecision(result) {
     return 9 - beforeDecimalPoint;
 }
 
+function changeSign(num) {
+    return (num * -1).toString();
+}
+
 let display = document.querySelector(".display");
 let numbers = document.querySelectorAll(".number");
 let decimalSep = document.querySelector(".decimal-separator");
 let operators = document.querySelectorAll(".operator");
 let equalsBtn = document.querySelector("#equalsBtn");
 let clearBtn = document.querySelector("#clearBtn");
+let plusMinusBtn = document.querySelector("#plusMinusBtn");
 
 numbers.forEach(
     function(numberBtn) {
@@ -147,4 +152,14 @@ clearBtn.addEventListener("click", () => {
     numB = "";
     operator = "";
     firstOperand = true;
+});
+
+plusMinusBtn.addEventListener("click", () => {
+    if (firstOperand) {
+        numA = changeSign(numA);
+        display.textContent = numA.replace(".",",");
+    } else {
+        numB = changeSign(numB);
+        display.textContent = numB.replace(".",",");
+    }
 });
