@@ -2,28 +2,35 @@ let numA = "";
 let numB = "";
 let operator = "";
 let firstOperand = true;
+const DIGITS = "0123456789";
 
 function add(a, b) {
-    let result = Number(a) + Number(b);
-    return Number(result.toFixed(8));
+    if (numA.includes(".") || numB.includes(".")) {
+        let result = Number(a) + Number(b);
+        return Number(result.toFixed(allowedPrecision(result)));
+    }
+    return Number(a) + Number(b);
 }
 
 function subtract(a, b) {
-    let result = Number(a) - Number(b);
-    return Number(result.toFixed(8));
+    if (numA.includes(".") || numB.includes(".")) {
+        let result = Number(a) - Number(b);
+        return Number(result.toFixed(allowedPrecision(result)));
+    }
+    return Number(a) - Number(b);
 }
 
 function multiply(a, b) {
-    let result = Number(a) * Number(b);
-    return Number(result.toFixed(8));
+    if (numA.includes(".") || numB.includes(".")) {
+        let result = Number(a) * Number(b);
+        return Number(result.toFixed(allowedPrecision(result)));
+    }
+    return Number(a) * Number(b);
 }
 
 function divide(a, b) {
-    if (b == 0) {
-        return "We don't do that here"
-    }
     let result = Number(a) / Number(b);
-    return Number(result.toFixed(8));
+    return Number(result.toFixed(allowedPrecision(result)));
 }
 
 function calculate(operator, numA, numB) {
@@ -41,6 +48,26 @@ function calculate(operator, numA, numB) {
     }
 }
 
+function countDigits(numberString) {
+    let cleanedString = numberString
+        .split("")
+        .filter(char => DIGITS.includes(char))
+        .join("");
+    return cleanedString.length;
+}
+
+function allowedPrecision(result) {
+    if (result < 0) result *= -1;
+
+    let beforeDecimalPoint = result
+    .toString()
+    .split(".")
+    .at(0)
+    .length;
+
+    return 9 - beforeDecimalPoint;
+}
+
 let display = document.querySelector(".display");
 let numbers = document.querySelectorAll(".number");
 let decimalSep = document.querySelector(".decimal-separator");
@@ -51,14 +78,14 @@ let clearBtn = document.querySelector("#clearBtn");
 numbers.forEach(
     function(numberBtn) {
         numberBtn.addEventListener("click", () => {
-            if (firstOperand && numA.length < 9) {
+            if (firstOperand && countDigits(numA) < 9) {
                 if (numB != "") { //already made an operation
                     numA = "";
                     numB = "";
                 }
                 display.textContent = numA.replace(".",",") + numberBtn.textContent;
                 numA += numberBtn.textContent;
-            } else if (!firstOperand && numB.length < 9) {
+            } else if (!firstOperand && countDigits(numB) < 9) {
                 if (numB == "") {
                     display.textContent = "";
                 }
@@ -71,7 +98,7 @@ numbers.forEach(
 );
 
 decimalSep.addEventListener("click", () => {
-    if (firstOperand && numA.length < 9) {
+    if (firstOperand && countDigits(numA) < 9) {
         if (!numA.includes(".")) {
             if (numB != "") { //already made an operation
                 numA = "";
@@ -80,13 +107,14 @@ decimalSep.addEventListener("click", () => {
             display.textContent = numA + ",";
             numA += ".";
         }
-    } else if (!firstOperand && numB.length < 9) {
-        if (numB == "") {
-            display.textContent = "";
+    } else if (!firstOperand && countDigits(numB) < 9) {
+        if (!numB.includes(".")) {
+            if (numB == "") {
+                display.textContent = "";
+            }
+            display.textContent = numB + ",";
+            numB += ".";
         }
-        display.textContent = numB + ",";
-        numB += ".";
-        console.log(`internally: A = ${numA}, B = ${numB}, operator = ${operator}`)
     } 
 });
 
@@ -96,7 +124,7 @@ operators.forEach(
             if (numB != "") {
                 let result = calculate(operator, numA, numB);
                 display.textContent = result;
-                numA = result;
+                numA = result.toString();
                 numB = "";
             }
             firstOperand = false;
