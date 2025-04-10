@@ -68,8 +68,8 @@ function allowedPrecision(result) {
     return 9 - beforeDecimalPoint;
 }
 
-function changeSign(num) {
-    return (num * -1).toString();
+function changeSign(numString) {
+    return numString.length > 0 ? (numString * -1).toString() : "-";
 }
 
 let display = document.querySelector(".display");
@@ -91,12 +91,11 @@ numbers.forEach(
                 display.textContent = numA.replace(".",",") + numberBtn.textContent;
                 numA += numberBtn.textContent;
             } else if (!firstOperand && countDigits(numB) < 9) {
-                if (numB == "") {
+                if (numB == "") { //starting to type numB
                     display.textContent = "";
                 }
                 display.textContent = numB.replace(".",",") + numberBtn.textContent;
                 numB += numberBtn.textContent;
-                console.log(`internally: A = ${numA}, B = ${numB}, operator = ${operator}`)
             } 
         });
     }
@@ -114,7 +113,7 @@ decimalSep.addEventListener("click", () => {
         }
     } else if (!firstOperand && countDigits(numB) < 9) {
         if (!numB.includes(".")) {
-            if (numB == "") {
+            if (numB == "") { //starting to type numB
                 display.textContent = "";
             }
             display.textContent = numB + ",";
@@ -142,7 +141,8 @@ equalsBtn.addEventListener("click", () => {
     if (numB != "" && operator != "") {
         let result = calculate(operator, numA, numB);
         display.textContent = result.toString().replace(".",",");
-        firstOperand = true;  
+        firstOperand = true;
+        console.log(`internally: A = ${numA}, B = ${numB}, operator = ${operator}`);
     }
 });
 
