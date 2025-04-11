@@ -79,6 +79,7 @@ let operators = document.querySelectorAll(".operator");
 let equalsBtn = document.querySelector("#equalsBtn");
 let clearBtn = document.querySelector("#clearBtn");
 let plusMinusBtn = document.querySelector("#plusMinusBtn");
+let percentBtn = document.querySelector("#percentBtn");
 
 numbers.forEach(
     function(numberBtn) {
@@ -160,6 +161,16 @@ plusMinusBtn.addEventListener("click", () => {
         display.textContent = numA.replace(".",",");
     } else {
         numB = changeSign(numB);
+        display.textContent = numB.replace(".",",");
+    }
+});
+
+percentBtn.addEventListener("click", () => {
+    if (firstOperand) {
+        numA = divide(numA, 100).toString();
+        display.textContent = numA.replace(".",",");
+    } else {
+        numB = divide(numB, 100).toString();
         display.textContent = numB.replace(".",",");
     }
 });
