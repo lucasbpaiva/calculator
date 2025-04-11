@@ -77,6 +77,7 @@ let numbers = document.querySelectorAll(".number");
 let decimalSep = document.querySelector(".decimal-separator");
 let operators = document.querySelectorAll(".operator");
 let equalsBtn = document.querySelector("#equalsBtn");
+let delBtn = document.querySelector("#delBtn");
 let clearBtn = document.querySelector("#clearBtn");
 let plusMinusBtn = document.querySelector("#plusMinusBtn");
 let percentBtn = document.querySelector("#percentBtn");
@@ -144,6 +145,26 @@ equalsBtn.addEventListener("click", () => {
         display.textContent = result.toString().replace(".",",");
         firstOperand = true;
         console.log(`internally: A = ${numA}, B = ${numB}, operator = ${operator}`);
+    }
+});
+
+delBtn.addEventListener("click", () => {
+    if (firstOperand && numA != "" && numA == display.textContent.replace(",",".")) {
+        if (countDigits(numA) == 1) {
+            numA = "";
+            display.textContent = "0";
+        } else {
+            numA = numA.slice(0, -1);
+            display.textContent = numA.replace(".",",");
+        }
+    } else if (!firstOperand && numB != "") {
+        if (countDigits(numB) == 1) {
+            numB = "";
+            display.textContent = "0";
+        } else {
+            numB = numB.slice(0, -1);
+            display.textContent = numB.replace(".",",");
+        }
     }
 });
 
