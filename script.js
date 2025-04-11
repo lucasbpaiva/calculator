@@ -129,7 +129,7 @@ operators.forEach(
         operatorBtn.addEventListener("click", () => {
             if (numB != "") {
                 let result = calculate(operator, numA, numB);
-                display.textContent = result;
+                display.textContent = result.toString().replace(".",",");
                 numA = result.toString();
                 numB = "";
             }
@@ -178,8 +178,13 @@ clearBtn.addEventListener("click", () => {
 
 plusMinusBtn.addEventListener("click", () => {
     if (firstOperand) {
-        numA = changeSign(numA);
-        display.textContent = numA.replace(".",",");
+        if (numA == display.textContent.replace(",",".")) {
+            numA = changeSign(numA);
+            display.textContent = numA.replace(".",",");
+        } else {
+            numA = changeSign(numA);
+            display.textContent = changeSign(display.textContent.replace(",","."));
+        }
     } else {
         numB = changeSign(numB);
         display.textContent = numB.replace(".",",");
