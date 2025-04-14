@@ -31,6 +31,7 @@ body {
 button {
     width: 96px;
     font-size: x-large;
+    outline: none;
 }
 
 .buttons {

@@ -82,28 +82,25 @@ let clearBtn = document.querySelector("#clearBtn");
 let plusMinusBtn = document.querySelector("#plusMinusBtn");
 let percentBtn = document.querySelector("#percentBtn");
 
-numbers.forEach(
-    function(numberBtn) {
-        numberBtn.addEventListener("click", () => {
-            if (firstOperand && countDigits(numA) < 9) {
-                if (numB != "") { //already made an operation
-                    numA = "";
-                    numB = "";
-                }
-                display.textContent = numA.replace(".",",") + numberBtn.textContent;
-                numA += numberBtn.textContent;
-            } else if (!firstOperand && countDigits(numB) < 9) {
-                if (numB == "") { //starting to type numB
-                    display.textContent = "";
-                }
-                display.textContent = numB.replace(".",",") + numberBtn.textContent;
-                numB += numberBtn.textContent;
-            } 
-        });
-    }
-);
+function inputNumber(number) {
+    if (firstOperand && countDigits(numA) < 9) {
+        if (numB != "") { //already made an operation
+            numA = "";
+            numB = "";
+        }
+        display.textContent = numA.replace(".",",") + number;
+        numA += number;
+    } else if (!firstOperand && countDigits(numB) < 9) {
+        if (numB == "") { //starting to type numB
+            display.textContent = "";
+        }
+        display.textContent = numB.replace(".",",") + number;
+        numB += number;
+    } 
+    document.activeElement.blur();
+}
 
-decimalSep.addEventListener("click", () => {
+function inputDecimalSeparator() {
     if (firstOperand && countDigits(numA) < 9) {
         if (!numA.includes(".")) {
             if (numB != "") { //already made an operation
@@ -122,33 +119,41 @@ decimalSep.addEventListener("click", () => {
             numB += ".";
         }
     } 
-});
+    document.activeElement.blur();
+}
 
-operators.forEach(
-    function(operatorBtn) {
-        operatorBtn.addEventListener("click", () => {
-            if (numB != "") {
-                let result = calculate(operator, numA, numB);
-                display.textContent = result.toString().replace(".",",");
-                numA = result.toString();
-                numB = "";
-            }
-            firstOperand = false;
-            operator = operatorBtn.name;
-        });
-    }
-);
-
-equalsBtn.addEventListener("click", () => {
+function inputEqualsSign() {
     if (numB != "" && operator != "") {
         let result = calculate(operator, numA, numB);
         display.textContent = result.toString().replace(".",",");
         firstOperand = true;
-        console.log(`internally: A = ${numA}, B = ${numB}, operator = ${operator}`);
     }
-});
+    document.activeElement.blur();
+}
 
-delBtn.addEventListener("click", () => {
+function inputOperator(operatorName) {
+    if (numB != "") {
+        let result = calculate(operator, numA, numB);
+        display.textContent = result.toString().replace(".",",");
+        numA = result.toString();
+        numB = "";
+    }
+    firstOperand = false;
+    operator = operatorName;
+    document.activeElement.blur();
+}
+
+function clearDisplay() {
+    display.textContent = "0";
+    numA = "";
+    numB = "";
+    operator = "";
+    firstOperand = true;
+    // After clicking a button, unfocus it. Otherwise pressing the Enter key will perform the equals operation and then perform the button click action.
+    document.activeElement.blur();
+}
+
+function deleteDigit() {
     if (firstOperand && numA != "" && numA == display.textContent.replace(",",".")) {
         if (countDigits(numA) == 1) {
             numA = "";
@@ -166,15 +171,67 @@ delBtn.addEventListener("click", () => {
             display.textContent = numB.replace(".",",");
         }
     }
+    document.activeElement.blur();
+}
+
+document.addEventListener("keydown", (event) => {
+    console.log(event.key);
+
+    if (DIGITS.includes(event.key)) inputNumber(event.key);
+
+    switch (event.key) {
+        case "Backspace":
+            deleteDigit();
+            break;
+        case "Escape":
+            clearDisplay();
+            break;
+        case ",":
+            inputDecimalSeparator();
+            break;
+        case ".":
+            inputDecimalSeparator();
+            break;
+        case "Enter":
+            inputEqualsSign();
+            break;
+        case "+":
+            inputOperator("add");
+            break;
+        case "-":
+            inputOperator("subtract");
+            break;
+        case "*":
+            inputOperator("multiply");
+            break;
+        case "/":
+            inputOperator("divide");
+            break;
+        default:
+            break;
+    }
 });
 
-clearBtn.addEventListener("click", () => {
-    display.textContent = "0";
-    numA = "";
-    numB = "";
-    operator = "";
-    firstOperand = true;
+numbers.forEach(numberBtn => {
+        numberBtn.addEventListener("click", () => {
+            inputNumber(numberBtn.textContent);
+        });
+    });
+
+decimalSep.addEventListener("click", inputDecimalSeparator);
+
+operators.forEach(operatorBtn => {
+    operatorBtn.addEventListener("click", () => {
+        let operatorName = operatorBtn.name;
+        inputOperator(operatorName);
+    });
 });
+
+equalsBtn.addEventListener("click", inputEqualsSign);
+
+delBtn.addEventListener("click", deleteDigit);
+
+clearBtn.addEventListener("click", clearDisplay);
 
 plusMinusBtn.addEventListener("click", () => {
     if (firstOperand) {
