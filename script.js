@@ -35,6 +35,8 @@ function multiply(a, b) {
 }
 
 function divide(a, b) {
+    if (b == 0) return "We don't do that here";
+
     let quotient = Number(a) / Number(b);
     if (allowedPrecision(quotient) < 0) {//|a / b| > 999.999.999
         let quotientAsExponential = quotient.toExponential(6);
@@ -111,7 +113,7 @@ function inputNumber(number) {
         if (numB == "") { //starting to type numB
             display.textContent = "";
         }
-        if (numB != 0) {
+        if (numB != "0") {
             display.textContent = numB.replace(".",",") + number;
             numB += number;
         } else {
@@ -167,8 +169,14 @@ function inputOperator(operatorName) {
 
 function inputPercentage() {
     if (firstOperand) {
-        numA = divide(numA, 100).toString();
-        display.textContent = numA.replace(".",",");
+        if (numA == display.textContent.replace(",",".")) {
+            numA = divide(numA, 100).toString();
+            display.textContent = numA.replace(".",",");
+        } else {
+            numB = "";
+            numA = divide(display.textContent.replace(",","."), 100).toString();
+            display.textContent = numA.replace(".",",");
+        }
     } else {
         numB = divide(numB, 100).toString();
         display.textContent = numB.replace(".",",");
