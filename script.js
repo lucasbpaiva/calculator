@@ -5,32 +5,43 @@ let firstOperand = true;
 const DIGITS = "0123456789";
 
 function add(a, b) {
-    if (numA.includes(".") || numB.includes(".")) {
-        let result = Number(a) + Number(b);
-        return Number(result.toFixed(allowedPrecision(result)));
+    let sum = Number(a) + Number(b);
+    if (allowedPrecision(sum) < 0) { //|a + b| > 999.999.999
+        let sumAsExponential = sum.toExponential(6);
+        let [base, exp] = sumAsExponential.split("e");
+        return Number(base) + "e" + exp;
     }
-    return Number(a) + Number(b);
+    return Number(sum.toFixed(allowedPrecision(sum)));
 }
 
 function subtract(a, b) {
-    if (numA.includes(".") || numB.includes(".")) {
-        let result = Number(a) - Number(b);
-        return Number(result.toFixed(allowedPrecision(result)));
+    let diff = Number(a) - Number(b);
+    if (allowedPrecision(diff) < 0) {//|a - b| > 999.999.999
+        let diffAsExponential = diff.toExponential(6);
+        let [base, exp] = diffAsExponential.split("e");
+        return Number(base) + "e" + exp;
     }
-    return Number(a) - Number(b);
+    return Number(diff.toFixed(allowedPrecision(diff)));
 }
 
 function multiply(a, b) {
-    if (numA.includes(".") || numB.includes(".")) {
-        let result = Number(a) * Number(b);
-        return Number(result.toFixed(allowedPrecision(result)));
+    let product = Number(a) * Number(b);
+    if (allowedPrecision(product) < 0) {//|a * b| > 999.999.999
+        let productAsExponential = product.toExponential(6);
+        let [base, exp] = productAsExponential.split("e");
+        return Number(base) + "e" + exp;
     }
-    return Number(a) * Number(b);
+    return Number(product.toFixed(allowedPrecision(product)));
 }
 
 function divide(a, b) {
-    let result = Number(a) / Number(b);
-    return Number(result.toFixed(allowedPrecision(result)));
+    let quotient = Number(a) / Number(b);
+    if (allowedPrecision(quotient) < 0) {//|a / b| > 999.999.999
+        let quotientAsExponential = quotient.toExponential(6);
+        let [base, exp] = quotientAsExponential.split("e");
+        return Number(base) + "e" + exp;
+    }
+    return Number(quotient.toFixed(allowedPrecision(quotient)));
 }
 
 function calculate(operator, numA, numB) {
