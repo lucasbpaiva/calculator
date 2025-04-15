@@ -143,6 +143,31 @@ function inputOperator(operatorName) {
     document.activeElement.blur();
 }
 
+function inputPercentage() {
+    if (firstOperand) {
+        numA = divide(numA, 100).toString();
+        display.textContent = numA.replace(".",",");
+    } else {
+        numB = divide(numB, 100).toString();
+        display.textContent = numB.replace(".",",");
+    }
+}
+
+function inputSignChange() {
+    if (firstOperand) {
+        if (numA == display.textContent.replace(",",".")) {
+            numA = changeSign(numA);
+            display.textContent = numA.replace(".",",");
+        } else {
+            numA = changeSign(numA);
+            display.textContent = changeSign(display.textContent.replace(",","."));
+        }
+    } else {
+        numB = changeSign(numB);
+        display.textContent = numB.replace(".",",");
+    }
+}
+
 function clearDisplay() {
     display.textContent = "0";
     numA = "";
@@ -185,6 +210,12 @@ document.addEventListener("keydown", (event) => {
             break;
         case "Escape":
             clearDisplay();
+            break;
+        case "–": //option + minus
+            inputSignChange();
+            break;
+        case "%":
+            inputPercentage();
             break;
         case ",":
             inputDecimalSeparator();
@@ -233,27 +264,6 @@ delBtn.addEventListener("click", deleteDigit);
 
 clearBtn.addEventListener("click", clearDisplay);
 
-plusMinusBtn.addEventListener("click", () => {
-    if (firstOperand) {
-        if (numA == display.textContent.replace(",",".")) {
-            numA = changeSign(numA);
-            display.textContent = numA.replace(".",",");
-        } else {
-            numA = changeSign(numA);
-            display.textContent = changeSign(display.textContent.replace(",","."));
-        }
-    } else {
-        numB = changeSign(numB);
-        display.textContent = numB.replace(".",",");
-    }
-});
+plusMinusBtn.addEventListener("click", inputSignChange);
 
-percentBtn.addEventListener("click", () => {
-    if (firstOperand) {
-        numA = divide(numA, 100).toString();
-        display.textContent = numA.replace(".",",");
-    } else {
-        numB = divide(numB, 100).toString();
-        display.textContent = numB.replace(".",",");
-    }
-});
+percentBtn.addEventListener("click", inputPercentage);
