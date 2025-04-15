@@ -88,14 +88,25 @@ function inputNumber(number) {
             numA = "";
             numB = "";
         }
-        display.textContent = numA.replace(".",",") + number;
-        numA += number;
+        if (numA != "0") {
+            display.textContent = numA.replace(".",",") + number;
+            numA += number;
+        } else { //prevent leading zeros
+            display.textContent = number;
+            numA = number; 
+        }
+        
     } else if (!firstOperand && countDigits(numB) < 9) {
         if (numB == "") { //starting to type numB
             display.textContent = "";
         }
-        display.textContent = numB.replace(".",",") + number;
-        numB += number;
+        if (numB != 0) {
+            display.textContent = numB.replace(".",",") + number;
+            numB += number;
+        } else {
+            display.textContent = number;
+            numB = number;
+        }
     } 
     document.activeElement.blur();
 }
@@ -151,6 +162,7 @@ function inputPercentage() {
         numB = divide(numB, 100).toString();
         display.textContent = numB.replace(".",",");
     }
+    document.activeElement.blur();
 }
 
 function inputSignChange() {
@@ -166,6 +178,7 @@ function inputSignChange() {
         numB = changeSign(numB);
         display.textContent = numB.replace(".",",");
     }
+    document.activeElement.blur();
 }
 
 function clearDisplay() {
