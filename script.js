@@ -3,10 +3,12 @@ let numB = "";
 let operator = "";
 let firstOperand = true;
 const DIGITS = "0123456789";
+const MIN = 1e-8;
 
 function add(a, b) {
     let sum = Number(a) + Number(b);
-    if (allowedPrecision(sum) < 0) { //|a + b| > 999.999.999
+    if (allowedPrecision(sum) < 0 || Math.abs(sum) < MIN) { 
+        //|a + b| > 999.999.999 or |a + b| < 0.00000001
         let sumAsExponential = sum.toExponential(6);
         let [base, exp] = sumAsExponential.split("e");
         return Number(base) + "e" + exp;
@@ -16,7 +18,8 @@ function add(a, b) {
 
 function subtract(a, b) {
     let diff = Number(a) - Number(b);
-    if (allowedPrecision(diff) < 0) {//|a - b| > 999.999.999
+    if (allowedPrecision(diff) < 0 || Math.abs(diff) < MIN) {
+        //|a - b| > 999.999.999 or |a - b| < 0.00000001
         let diffAsExponential = diff.toExponential(6);
         let [base, exp] = diffAsExponential.split("e");
         return Number(base) + "e" + exp;
@@ -26,7 +29,8 @@ function subtract(a, b) {
 
 function multiply(a, b) {
     let product = Number(a) * Number(b);
-    if (allowedPrecision(product) < 0) {//|a * b| > 999.999.999
+    if (allowedPrecision(product) < 0 || Math.abs(product) < MIN) {
+        //|a * b| > 999.999.999 or |a * b| < 0.00000001
         let productAsExponential = product.toExponential(6);
         let [base, exp] = productAsExponential.split("e");
         return Number(base) + "e" + exp;
@@ -38,7 +42,8 @@ function divide(a, b) {
     if (b == 0) return "We don't do that here";
 
     let quotient = Number(a) / Number(b);
-    if (allowedPrecision(quotient) < 0) {//|a / b| > 999.999.999
+    if (allowedPrecision(quotient) < 0 || Math.abs(quotient) < MIN) {
+        //|a / b| > 999.999.999 or |a / b| < 0.00000001
         let quotientAsExponential = quotient.toExponential(6);
         let [base, exp] = quotientAsExponential.split("e");
         return Number(base) + "e" + exp;
