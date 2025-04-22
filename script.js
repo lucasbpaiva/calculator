@@ -3,52 +3,69 @@ let numB = "";
 let operator = "";
 let firstOperand = true;
 const DIGITS = "0123456789";
-const MIN = 1e-8;
+const MINDISPLAY = 1e-8;
+const MINJS = 1e-6;
 
 function add(a, b) {
     let sum = Number(a) + Number(b);
-    if (allowedPrecision(sum) < 0 || Math.abs(sum) < MIN) { 
+
+    if (allowedPrecision(sum) < 0 || Math.abs(sum) < MINDISPLAY) { 
         //|a + b| > 999.999.999 or |a + b| < 0.00000001
         let sumAsExponential = sum.toExponential(6);
         let [base, exp] = sumAsExponential.split("e");
         return Number(base) + "e" + exp;
     }
-    return Number(sum.toFixed(allowedPrecision(sum)));
+
+    let result = sum.toFixed(allowedPrecision(sum));
+    // avoid automatic conversion to exponential notation when result is between 1e-8 and 1e-6
+    return (Math.abs(sum) < MINJS) ? result : Number(result);
 }
 
 function subtract(a, b) {
     let diff = Number(a) - Number(b);
-    if (allowedPrecision(diff) < 0 || Math.abs(diff) < MIN) {
+
+    if (allowedPrecision(diff) < 0 || Math.abs(diff) < MINDISPLAY) {
         //|a - b| > 999.999.999 or |a - b| < 0.00000001
         let diffAsExponential = diff.toExponential(6);
         let [base, exp] = diffAsExponential.split("e");
         return Number(base) + "e" + exp;
     }
-    return Number(diff.toFixed(allowedPrecision(diff)));
+
+    let result = diff.toFixed(allowedPrecision(diff));
+    // avoid automatic conversion to exponential notation when result is between 1e-8 and 1e-6
+    return (Math.abs(diff) < MINJS) ? result : Number(result);
 }
 
 function multiply(a, b) {
     let product = Number(a) * Number(b);
-    if (allowedPrecision(product) < 0 || Math.abs(product) < MIN) {
+
+    if (allowedPrecision(product) < 0 || Math.abs(product) < MINDISPLAY) {
         //|a * b| > 999.999.999 or |a * b| < 0.00000001
         let productAsExponential = product.toExponential(6);
         let [base, exp] = productAsExponential.split("e");
         return Number(base) + "e" + exp;
     }
-    return Number(product.toFixed(allowedPrecision(product)));
+
+    let result = product.toFixed(allowedPrecision(product));
+    // avoid automatic conversion to exponential notation when result is between 1e-8 and 1e-6
+    return (Math.abs(product) < MINJS) ? result : Number(result);
 }
 
 function divide(a, b) {
     if (b == 0) return "We don't do that here";
 
     let quotient = Number(a) / Number(b);
-    if (allowedPrecision(quotient) < 0 || Math.abs(quotient) < MIN) {
+
+    if (allowedPrecision(quotient) < 0 || Math.abs(quotient) < MINDISPLAY) {
         //|a / b| > 999.999.999 or |a / b| < 0.00000001
         let quotientAsExponential = quotient.toExponential(6);
         let [base, exp] = quotientAsExponential.split("e");
         return Number(base) + "e" + exp;
     }
-    return Number(quotient.toFixed(allowedPrecision(quotient)));
+
+    let result = quotient.toFixed(allowedPrecision(quotient));
+    // avoid automatic conversion to exponential notation when result is between 1e-8 and 1e-6
+    return (Math.abs(quotient) < MINJS) ? result : Number(result);
 }
 
 function calculate(operator, numA, numB) {
@@ -76,6 +93,13 @@ function countDigits(numberString) {
 
 function allowedPrecision(result) {
     if (result < 0) result *= -1;
+
+    if (result.toString().includes("e")) { // result in [1e-8, 1e-6)
+        return result
+        .toString()
+        .split("e-")
+        .at(1)
+    }
 
     let beforeDecimalPoint = result
     .toString()
@@ -237,7 +261,6 @@ function deleteDigit() {
 }
 
 document.addEventListener("keydown", (event) => {
-    console.log(event.key);
 
     if (DIGITS.includes(event.key)) inputNumber(event.key);
 
