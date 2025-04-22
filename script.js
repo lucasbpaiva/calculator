@@ -121,23 +121,20 @@ function inputNumber(number) {
 }
 
 function inputDecimalSeparator() {
-    if (firstOperand && countDigits(numA) < 9) {
-        if (!numA.includes(".")) {
-            if (numB != "") { //already made an operation
-                numA = "";
-                numB = "";
-            }
-            display.textContent = numA + ",";
-            numA += ".";
+    if (firstOperand && countDigits(numA) < 9 && !numA.includes(".")) {
+        if (numA == "") numA = "0";
+        if (numB != "") { //already made an operation
+            numA = "";
+            numB = "";
         }
-    } else if (!firstOperand && countDigits(numB) < 9) {
-        if (!numB.includes(".")) {
-            if (numB == "") { //starting to type numB
-                display.textContent = "";
-            }
-            display.textContent = numB + ",";
-            numB += ".";
+        display.textContent = numA + ",";
+        numA += ".";
+    } else if (!firstOperand && countDigits(numB) < 9 && !numB.includes(".")) {
+        if (numB == "") { //starting to type numB
+            numB = "0";
         }
+        display.textContent = numB + ",";
+        numB += ".";
     } 
     document.activeElement.blur();
 }
