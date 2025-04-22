@@ -6,66 +6,33 @@ const DIGITS = "0123456789";
 const MINDISPLAY = 1e-8;
 const MINJS = 1e-6;
 
-function add(a, b) {
-    let sum = Number(a) + Number(b);
-
-    if (allowedPrecision(sum) < 0 || Math.abs(sum) < MINDISPLAY) { 
-        //|a + b| > 999.999.999 or |a + b| < 0.00000001
-        let sumAsExponential = sum.toExponential(6);
-        let [base, exp] = sumAsExponential.split("e");
+function formatResult(result) {
+    if (allowedPrecision(result) < 0 || Math.abs(result) < MINDISPLAY) { 
+        //|result| > 999.999.999 or |result| < 0.00000001
+        let resultAsExponential = result.toExponential(6);
+        let [base, exp] = resultAsExponential.split("e");
         return Number(base) + "e" + exp;
     }
 
-    let result = sum.toFixed(allowedPrecision(sum));
+    let output = result.toFixed(allowedPrecision(result));
     // avoid automatic conversion to exponential notation when result is between 1e-8 and 1e-6
-    return (Math.abs(sum) < MINJS) ? result : Number(result);
+    return (Math.abs(result) < MINJS) ? output : Number(output);
+}
+
+function add(a, b) {
+    return formatResult(Number(a) + Number(b));
 }
 
 function subtract(a, b) {
-    let diff = Number(a) - Number(b);
-
-    if (allowedPrecision(diff) < 0 || Math.abs(diff) < MINDISPLAY) {
-        //|a - b| > 999.999.999 or |a - b| < 0.00000001
-        let diffAsExponential = diff.toExponential(6);
-        let [base, exp] = diffAsExponential.split("e");
-        return Number(base) + "e" + exp;
-    }
-
-    let result = diff.toFixed(allowedPrecision(diff));
-    // avoid automatic conversion to exponential notation when result is between 1e-8 and 1e-6
-    return (Math.abs(diff) < MINJS) ? result : Number(result);
+    return formatResult(Number(a) - Number(b));
 }
 
 function multiply(a, b) {
-    let product = Number(a) * Number(b);
-
-    if (allowedPrecision(product) < 0 || Math.abs(product) < MINDISPLAY) {
-        //|a * b| > 999.999.999 or |a * b| < 0.00000001
-        let productAsExponential = product.toExponential(6);
-        let [base, exp] = productAsExponential.split("e");
-        return Number(base) + "e" + exp;
-    }
-
-    let result = product.toFixed(allowedPrecision(product));
-    // avoid automatic conversion to exponential notation when result is between 1e-8 and 1e-6
-    return (Math.abs(product) < MINJS) ? result : Number(result);
+    return formatResult(Number(a) * Number(b));
 }
 
 function divide(a, b) {
-    if (b == 0) return "We don't do that here";
-
-    let quotient = Number(a) / Number(b);
-
-    if (allowedPrecision(quotient) < 0 || Math.abs(quotient) < MINDISPLAY) {
-        //|a / b| > 999.999.999 or |a / b| < 0.00000001
-        let quotientAsExponential = quotient.toExponential(6);
-        let [base, exp] = quotientAsExponential.split("e");
-        return Number(base) + "e" + exp;
-    }
-
-    let result = quotient.toFixed(allowedPrecision(quotient));
-    // avoid automatic conversion to exponential notation when result is between 1e-8 and 1e-6
-    return (Math.abs(quotient) < MINJS) ? result : Number(result);
+    return (b == 0) ? "We don't do that here" : formatResult(Number(a) / Number(b));
 }
 
 function calculate(operator, numA, numB) {
