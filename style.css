@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap');
+
 * {
     /* border: solid 2px green; */
     box-sizing: border-box;
@@ -6,18 +8,24 @@
 body {
     display: flex;
     justify-content: center;
+    background-color: antiquewhite;
 }
 
 .container {
+    border-radius: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 400px;
     border: solid 1px gray;
     margin-top: 200px;
+    background-color: #222831;
+    font-family: "Orbitron", sans-serif;
+
 }
 
 .display {
+    color: white;
     display: flex;
     align-items: center;
     justify-content: end;
@@ -32,6 +40,8 @@ button {
     width: 96px;
     font-size: x-large;
     outline: none;
+    border-radius: 5px;
+    font-family: "Orbitron", sans-serif;
 }
 
 .buttons {
@@ -43,3 +53,16 @@ button {
     gap: 2px;
 }
 
+.operator, #equalsBtn {
+    color: whitesmoke;
+    background-color: #f96d00;
+}
+
+.number, .decimal-separator {
+    color: whitesmoke;
+    background-color: #393e46;
+}
+
+.extra-buttons {
+    background-color: #f2f2f2;
+}
