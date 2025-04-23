@@ -10,3 +10,5 @@ as 0e+0 but in the end it was a great opportunity for learning more about how Ja
 and arithmetic operations.
 
 You can see the project live at https://lucasbpaiva.github.io/calculator/
+
+![calculator-demo](./images/calculator-demo.png)
