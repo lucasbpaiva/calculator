@@ -123,6 +123,7 @@ function inputNumber(number) {
 function inputDecimalSeparator() {
     if (firstOperand && countDigits(numA) < 9 && !numA.includes(".")) {
         if (numA == "") numA = "0";
+        if (numA == "-") numA = "-0";
         if (numB != "") { //already made an operation
             numA = "";
             numB = "";
@@ -130,9 +131,8 @@ function inputDecimalSeparator() {
         display.textContent = numA + ",";
         numA += ".";
     } else if (!firstOperand && countDigits(numB) < 9 && !numB.includes(".")) {
-        if (numB == "") { //starting to type numB
-            numB = "0";
-        }
+        if (numB == "") numB = "0"; //starting to type numB
+        if (numB == "-") numB = "-0";
         display.textContent = numB + ",";
         numB += ".";
     } 
