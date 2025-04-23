@@ -81,6 +81,7 @@ function allowedPrecision(result) {
 }
 
 function changeSign(numString) {
+    if (numString == "-") return "";
     return numString.length > 0 ? (numString * -1).toString() : "-";
 }
 
