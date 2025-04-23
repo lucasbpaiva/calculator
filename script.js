@@ -7,6 +7,9 @@ const MINDISPLAY = 1e-8;
 const MINJS = 1e-6;
 
 function formatResult(result) {
+
+    if (result == 0) return 0;
+
     if (allowedPrecision(result) < 0 || Math.abs(result) < MINDISPLAY) { 
         //|result| > 999.999.999 or |result| < 0.00000001
         let resultAsExponential = result.toExponential(6);
