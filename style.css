@@ -58,11 +58,24 @@ button {
     background-color: #f96d00;
 }
 
+.operator:active, #equalsBtn:active {
+    color: hsl(0, 0%, 46%);
+    background-color: hsl(26, 100%, 99%);
+}
+
 .number, .decimal-separator {
     color: whitesmoke;
     background-color: #393e46;
 }
 
+.number:active, .decimal-separator:active {
+    background-color: hsl(217, 10%, 75%);
+}
+
 .extra-buttons {
     background-color: #f2f2f2;
+}
+
+.extra-buttons:active {
+    background-color: hsl(0, 0%, 45%);
 }
